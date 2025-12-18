@@ -1,3 +1,6 @@
 package com.example.demo.repository;
 
-public interface BookingRepository extends 
+@Repository
+public interface BookingRepository extends JpaRepository <Booking Long>{
+
+}
