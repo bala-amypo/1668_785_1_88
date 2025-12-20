@@ -19,5 +19,5 @@ public class SApartmentUnitModel{
     private String name;
     private String email;
     private String password;
-    private String role="RESIDENT"
+    private String role="RESIDENT";
 }
