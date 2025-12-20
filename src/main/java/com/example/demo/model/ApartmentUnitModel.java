@@ -15,5 +15,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SApartmentUnitModel{
     @Id
-    @GeneratedValue(strategy=GenerationType)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Integer id;
+    private String name;
+    private String email;
+    private String password;
 }
