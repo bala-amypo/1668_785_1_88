@@ -1,6 +1,5 @@
 package com.example.demo;
 
-import java.util.Date;
 import jakarta.persistence.Model;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,4 +19,5 @@ public class SApartmentUnitModel{
     private String name;
     private String email;
     private String password;
+    private String role="RESIDENT"
 }
