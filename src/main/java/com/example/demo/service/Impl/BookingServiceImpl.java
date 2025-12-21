@@ -31,7 +31,7 @@ public class BookingServiceImpl implements BookingService{
     return used.findById(id).orElse(null);
     }
     @Override
-    public Booking updateData3(Long id,Facility entity){
+    public Booking updateData3(Long id,Booking entity){
         if(used.existsById(id)){
             entity.setId(id);
             return used.save(entity);
