@@ -36,6 +36,6 @@ public class BookingController{
     }
     @PutMapping("/put/{id}")
     public Booking putval(@PathVariable Long id,@RequestBody Booking entity){
-        return ser.updateData2(id,entity);
+        return ser.updateData3(id,entity);
     }
 }
