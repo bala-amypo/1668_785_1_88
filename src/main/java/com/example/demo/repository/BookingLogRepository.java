@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import com.example.demo.model.BookingLog;
 
 @Repository 
-public interface BookingLogRepository extends JpaRepository<Booking,Long>{
+public interface BookingLogRepository extends JpaRepository<BookingLog,Long>{
     
 }
