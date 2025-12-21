@@ -38,4 +38,5 @@ public class ApartmentUnitController{
     public ApartmentUnit putval(@PathVariable Long id,@RequestBody ApartmentUnit entity){
         return ser.updateData5(id,entity);
     }
-}
+}  
+
