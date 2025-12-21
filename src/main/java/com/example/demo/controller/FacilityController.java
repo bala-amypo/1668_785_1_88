@@ -19,27 +19,27 @@ import jakarta.validation.Valid;
 public class FacilityController{
     @Autowired  FacilityService ser;
     @PostMapping("/register")
-    public User sendData(@RequestBody User stu){
-        return ser.postData1(stu);
+    public Facility sendData(@RequestBody Facility stu){
+        return ser.postData2(stu);
     }
     @PostMapping("/login")
-    public User senddata(@RequestBody User log){
+    public Facility senddata(@RequestBody Facility log){
         return ser.postdata(log);
     }
     @GetMapping("/get")
-    public List<User> getval(){
-        return ser.getAllData1();
+    public List<Facility> getval(){
+        return ser.getAllData2();
     }
     @DeleteMapping("/delete/{id}")
     public String del(@PathVariable Long id){
-        return ser.DeleteData1(id);
+        return ser.DeleteData2(id);
     }
     @GetMapping("/find/{id}")
-    public User find(@PathVariable Long id){
-        return ser.getData1(id);
+    public Facility find(@PathVariable Long id){
+        return ser.getData2(id);
     }
     @PutMapping("/put/{id}")
-    public User putval(@PathVariable Long id,@RequestBody User entity){
-        return ser.updateData1(id,entity);
+    public Facility putval(@PathVariable Long id,@RequestBody Facility entity){
+        return ser.updateData2(id,entity);
     }
 }
