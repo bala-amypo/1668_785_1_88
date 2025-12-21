@@ -3,35 +3,35 @@ package com.example.demo.service.impl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;   
-import com.example.demo.model.Facility;
-import com.example.demo.repository.FacilityRepository;
+import com.example.demo.model.Booking;
+import com.example.demo.repository.BookingRepository;
 import org.springframework.web.bind.annotation.PathVariable;
-import com.example.demo.service.FacilityService;                
+import com.example.demo.service.BookingService;                
 
 @Service
-public class FacilityServiceImpl implements FacilityService{
+public class BookingServiceImpl implements BookingService{
 
-    @Autowired FacilityRepository used;
+    @Autowired BookingRepository used;
     @Override
-    public Facility postData2(Facility use){
+    public Booking postData3(Booking use){
         return used.save(use);  
     }
    
     @Override
-    public List<Facility>getAllData2(){
+    public List<Booking>getAllData3(){
         return used.findAll();
     }
     @Override
-    public String DeleteData2(Long id){
+    public String DeleteData3(Long id){
         used.deleteById(id);
         return "Deleted successfully";
     }
     @Override
-    public Facility getData2(Long id){
+    public Booking getData3(Long id){
     return used.findById(id).orElse(null);
     }
     @Override
-    public Facility updateData2(Long id,Facility entity){
+    public Booking updateData3(Long id,Facility entity){
         if(used.existsById(id)){
             entity.setId(id);
             return used.save(entity);
