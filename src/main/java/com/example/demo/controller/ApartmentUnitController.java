@@ -28,14 +28,14 @@ public class ApartmentUnitController{
     }
     @DeleteMapping("/delete/{id}")
     public String del(@PathVariable Long id){
-        return ser.DeleteData3(id);
+        return ser.DeleteData5(id);
     }
     @GetMapping("/find/{id}")
-    public Booking find(@PathVariable Long id){
-        return ser.getData3(id);
+    public ApartmentUnitg find(@PathVariable Long id){
+        return ser.getData5(id);
     }
     @PutMapping("/put/{id}")
-    public Booking putval(@PathVariable Long id,@RequestBody Booking entity){
-        return ser.updateData3(id,entity);
+    public ApartmentUnit putval(@PathVariable Long id,@RequestBody ApartmentUnit entity){
+        return ser.updateData5(id,entity);
     }
 }
