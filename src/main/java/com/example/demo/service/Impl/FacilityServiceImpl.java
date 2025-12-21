@@ -13,7 +13,7 @@ public class FacilityServiceImpl implements FacilityService{
 
     @Autowired FacilityRepository used;
     @Override
-    public Facility postData1(Facility use){
+    public Facility postData2(Facility use){
         return used.save(use);  
     }
    
