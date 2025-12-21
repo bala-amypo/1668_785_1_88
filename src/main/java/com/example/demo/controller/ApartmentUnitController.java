@@ -31,7 +31,7 @@ public class ApartmentUnitController{
         return ser.DeleteData5(id);
     }
     @GetMapping("/find/{id}")
-    public ApartmentUnitg find(@PathVariable Long id){
+    public ApartmentUnit find(@PathVariable Long id){
         return ser.getData5(id);
     }
     @PutMapping("/put/{id}")
