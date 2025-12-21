@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.example.demo.service.ApartmentUnitService;                
 
 @Service
-public class ApartmentUnitgServiceImpl implements ApartmentUnitService{
+public class ApartmentUnitServiceImpl implements ApartmentUnitService{
 
     @Autowired ApartmentUnitRepository used;
     @Override
