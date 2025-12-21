@@ -9,28 +9,25 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.example.demo.service.FacilityService;                
 
 @Service
-public class UserServiceImpl implements UserService{
+public class FacilityServiceImpl implements FacilityService{
 
-    @Autowired UserRepository used;
+    @Autowired FacilityRepository used;
     @Override
-    public User postData1(User use){
+    public Facility postData1(Facility use){
         return used.save(use);  
     }
+   
     @Override
-    public User postdata(User log){
-        return used.save(log);
-    }
-    @Override
-    public List<User>getAllData1(){
+    public List<Facility>getAllData2(){
         return used.findAll();
     }
     @Override
-    public String DeleteData1(Long id){
+    public String DeleteData2(Long id){
         used.deleteById(id);
         return "Deleted successfully";
     }
     @Override
-    public User getData1(Long id){
+    public Facility getData2(Long id){
     return used.findById(id).orElse(null);
     }
     @Override
