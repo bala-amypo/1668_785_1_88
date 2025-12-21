@@ -14,17 +14,13 @@ import com.example.demo.model.Facility;
 import com.example.demo.service.FacilityService;
 import jakarta.validation.Valid;
 
-@RequestMapping("/User")
+@RequestMapping("/Facility")
 @RestController
 public class FacilityController{
     @Autowired  FacilityService ser;
     @PostMapping("/register")
     public Facility sendData(@RequestBody Facility stu){
         return ser.postData2(stu);
-    }
-    @PostMapping("/login")
-    public Facility senddata(@RequestBody Facility log){
-        return ser.postdata(log);
     }
     @GetMapping("/get")
     public List<Facility> getval(){
