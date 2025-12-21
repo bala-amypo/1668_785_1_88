@@ -22,16 +22,16 @@ public class BookingLogServiceImpl implements BookingLogService{
         return used.findAll();
     }
     @Override
-    public String DeleteData3(Long id){
+    public String DeleteData4(Long id){
         used.deleteById(id);
         return "Deleted successfully";
     }
     @Override
-    public Booking getData3(Long id){
+    public BookingLog getData4(Long id){
     return used.findById(id).orElse(null);
     }
     @Override
-    public Booking updateData3(Long id,Booking entity){
+    public BookingLog updateData4(Long id,BookingLog entity){
         if(used.existsById(id)){
             entity.setId(id);
             return used.save(entity);
