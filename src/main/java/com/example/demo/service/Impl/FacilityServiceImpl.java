@@ -31,7 +31,7 @@ public class FacilityServiceImpl implements FacilityService{
     return used.findById(id).orElse(null);
     }
     @Override
-    public User updateData1(Long id,User entity){
+    public Facility updateData2(Long id,Facility entity){
         if(used.existsById(id)){
             entity.setId(id);
             return used.save(entity);
