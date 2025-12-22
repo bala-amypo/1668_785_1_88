@@ -23,8 +23,8 @@ public class Facility {
     private String description;
 
     @Column(nullable = false)
-    private LocalTime openTime;   // HH:mm
+    private LocalTime openTime;  
 
     @Column(nullable = false)
-    private LocalTime closeTime;  // HH:mm
+    private LocalTime closeTime; 
 }
