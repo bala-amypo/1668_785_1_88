@@ -16,12 +16,12 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Many bookings → one facility
+  
     @ManyToOne
     @JoinColumn(name = "facility_id", nullable = false)
     private Facility facility;
 
-    // Many bookings → one user
+   
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -33,5 +33,5 @@ public class Booking {
     private LocalDateTime endTime;
 
     @Column(nullable = false)
-    private String status = "CONFIRMED"; // default
+    private String status = "CONFIRMED"; 
 }

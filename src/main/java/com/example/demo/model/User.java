@@ -18,12 +18,12 @@ public class User {
     private String name;
 
     @Column(nullable = false, unique = true)
-    private String email;   // UNIQUE
+    private String email;   
 
     @Column(nullable = false)
-    private String password; // HASHED (BCrypt)
+    private String password; 
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role = Role.RESIDENT; // DEFAULT
+    private Role role = Role.RESIDENT; 
 }

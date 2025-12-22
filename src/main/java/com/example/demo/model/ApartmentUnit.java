@@ -15,11 +15,11 @@ public class ApartmentUnit {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String unitNumber;   // UNIQUE
+    private String unitNumber;   
 
     @Min(0)
     @Column(nullable = false)
-    private int floor;           // floor >= 0
+    private int floor;           
 
     @OneToOne
     @JoinColumn(name = "owner_id", nullable = false, unique = true)

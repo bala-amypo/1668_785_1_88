@@ -15,7 +15,6 @@ public class BookingLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Many logs → one booking
     @ManyToOne
     @JoinColumn(name = "booking_id", nullable = false)
     private Booking booking;
