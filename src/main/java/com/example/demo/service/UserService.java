@@ -10,4 +10,4 @@ public interface UserService{
     String  DeleteData1(Long id);
     User getData1(Long id);         
     User updateData1(Long id,User entity);                                                        
-} 
+}      
