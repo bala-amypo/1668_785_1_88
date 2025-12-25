@@ -42,31 +42,3 @@
 
 
 
-
-package com.example.demo.service.impl;
-
-import com.example.demo.model.*;
-import com.example.demo.repository.*;
-import com.example.demo.service.BookingLogService;
-
-import java.util.List;
-
-public class BookingLogServiceImpl implements BookingLogService {
-
-    private final BookingLogRepository repo;
-    private final BookingRepository bookingRepo;
-
-    public BookingLogServiceImpl(BookingLogRepository r, BookingRepository b) {
-        repo = r; bookingRepo = b;
-    }
-
-    public BookingLog addLog(Long bookingId, String msg) {
-        Booking b = bookingRepo.findById(bookingId).orElseThrow();
-        return repo.save(new BookingLog(null, b, msg, null));
-    }
-
-    public List<BookingLog> getLogsByBooking(Long bookingId) {
-        Booking b = bookingRepo.findById(bookingId).orElseThrow();
-        return repo.findByBookingOrderByLoggedAtAsc(b);
-    }
-}

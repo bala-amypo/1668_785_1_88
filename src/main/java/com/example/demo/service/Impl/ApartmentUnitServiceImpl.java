@@ -42,32 +42,3 @@
 
 
 
-package com.example.demo.service.impl;
-
-import com.example.demo.model.*;
-import com.example.demo.repository.*;
-import com.example.demo.service.ApartmentUnitService;
-
-public class ApartmentUnitServiceImpl implements ApartmentUnitService {
-
-    private final ApartmentUnitRepository repo;
-    private final UserRepository userRepo;
-
-    public ApartmentUnitServiceImpl(ApartmentUnitRepository r, UserRepository u) {
-        this.repo = r;
-        this.userRepo = u;
-    }
-
-    public ApartmentUnit assignUnitToUser(Long userId, ApartmentUnit unit) {
-        User user = userRepo.findById(userId).orElseThrow();
-        unit.setOwner(user);
-        ApartmentUnit saved = repo.save(unit);
-        user.setApartmentUnit(saved);
-        return saved;
-    }
-
-    public ApartmentUnit getUnitByUser(Long userId) {
-        User u = userRepo.findById(userId).orElseThrow();
-        return repo.findByOwner(u).orElseThrow();
-    }
-}
