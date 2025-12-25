@@ -44,3 +44,30 @@
 
 
 
+package com.example.demo.controller;
+
+import com.example.demo.model.ApartmentUnit;
+import com.example.demo.service.ApartmentUnitService;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/units")
+public class ApartmentUnitController {
+
+    private final ApartmentUnitService service;
+
+    public ApartmentUnitController(ApartmentUnitService s) {
+        this.service = s;
+    }
+
+    @PostMapping("/{userId}")
+    public ApartmentUnit assign(@PathVariable Long userId,
+                                @RequestBody ApartmentUnit u) {
+        return service.assignUnitToUser(userId, u);
+    }
+
+    @GetMapping("/{userId}")
+    public ApartmentUnit get(@PathVariable Long userId) {
+        return service.getUnitByUser(userId);
+    }
+}
