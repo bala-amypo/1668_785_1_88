@@ -52,13 +52,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/facilities")
+@RequestMapping("/facilities")
 public class FacilityController {
 
     private final FacilityService service;
 
-    public FacilityController(FacilityService service) {
-        this.service = service;
+    public FacilityController(FacilityService s) {
+        this.service = s;
     }
 
     @PostMapping

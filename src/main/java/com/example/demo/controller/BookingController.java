@@ -43,8 +43,6 @@
 
 
 
-
-
 package com.example.demo.controller;
 
 import com.example.demo.model.Booking;
@@ -52,29 +50,24 @@ import com.example.demo.service.BookingService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/bookings")
+@RequestMapping("/bookings")
 public class BookingController {
 
     private final BookingService service;
 
-    public BookingController(BookingService service) {
-        this.service = service;
+    public BookingController(BookingService s) {
+        this.service = s;
     }
 
     @PostMapping("/{facilityId}/{userId}")
     public Booking create(@PathVariable Long facilityId,
                           @PathVariable Long userId,
-                          @RequestBody Booking booking) {
-        return service.createBooking(facilityId, userId, booking);
+                          @RequestBody Booking b) {
+        return service.createBooking(facilityId, userId, b);
     }
 
     @DeleteMapping("/{id}")
     public Booking cancel(@PathVariable Long id) {
         return service.cancelBooking(id);
-    }
-
-    @GetMapping("/{id}")
-    public Booking get(@PathVariable Long id) {
-        return service.getBooking(id);
     }
 }
