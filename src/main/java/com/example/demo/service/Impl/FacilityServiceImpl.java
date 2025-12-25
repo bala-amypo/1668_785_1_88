@@ -1,41 +1,76 @@
+// package com.example.demo.service.impl;
+
+// import java.util.List;
+// import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.stereotype.Service;   
+// import com.example.demo.model.Facility;
+// import com.example.demo.repository.FacilityRepository;
+// import org.springframework.web.bind.annotation.PathVariable;
+// import com.example.demo.service.FacilityService;                
+
+// @Service
+// public class FacilityServiceImpl implements FacilityService{
+
+//     @Autowired FacilityRepository used;
+//     @Override
+//     public Facility postData2(Facility use){
+//         return used.save(use);  
+//     }
+   
+//     @Override
+//     public List<Facility>getAllData2(){
+//         return used.findAll();
+//     }
+//     @Override
+//     public String DeleteData2(Long id){
+//         used.deleteById(id);
+//         return "Deleted successfully";
+//     }
+//     @Override
+//     public Facility getData2(Long id){
+//     return used.findById(id).orElse(null);
+//     }
+//     @Override
+//     public Facility updateData2(Long id,Facility entity){
+//         if(used.existsById(id)){
+//             entity.setId(id);
+//             return used.save(entity);
+//         } 
+//         return null;
+//     }
+// }
+
+
+
+
 package com.example.demo.service.impl;
 
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;   
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.Facility;
 import com.example.demo.repository.FacilityRepository;
-import org.springframework.web.bind.annotation.PathVariable;
-import com.example.demo.service.FacilityService;                
+import com.example.demo.service.FacilityService;
 
-@Service
-public class FacilityServiceImpl implements FacilityService{
+import java.util.List;
 
-    @Autowired FacilityRepository used;
-    @Override
-    public Facility postData2(Facility use){
-        return used.save(use);  
+public class FacilityServiceImpl implements FacilityService {
+
+    private final FacilityRepository repo;
+
+    public FacilityServiceImpl(FacilityRepository repo) {
+        this.repo = repo;
     }
-   
-    @Override
-    public List<Facility>getAllData2(){
-        return used.findAll();
+
+    public Facility addFacility(Facility f) {
+        if (repo.findByName(f.getName()).isPresent())
+            throw new BadRequestException("Duplicate");
+
+        if (f.getOpenTime().compareTo(f.getCloseTime()) >= 0)
+            throw new BadRequestException("Invalid time");
+
+        return repo.save(f);
     }
-    @Override
-    public String DeleteData2(Long id){
-        used.deleteById(id);
-        return "Deleted successfully";
-    }
-    @Override
-    public Facility getData2(Long id){
-    return used.findById(id).orElse(null);
-    }
-    @Override
-    public Facility updateData2(Long id,Facility entity){
-        if(used.existsById(id)){
-            entity.setId(id);
-            return used.save(entity);
-        } 
-        return null;
+
+    public List<Facility> getAllFacilities() {
+        return repo.findAll();
     }
 }
