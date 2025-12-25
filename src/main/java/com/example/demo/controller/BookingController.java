@@ -39,3 +39,42 @@
 //         return ser.updateData3(id,entity);
 //     }
 // }
+
+
+
+
+
+
+package com.example.demo.controller;
+
+import com.example.demo.model.Booking;
+import com.example.demo.service.BookingService;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/bookings")
+public class BookingController {
+
+    private final BookingService service;
+
+    public BookingController(BookingService service) {
+        this.service = service;
+    }
+
+    @PostMapping("/{userId}/{facilityId}")
+    public Booking create(@PathVariable Long userId,
+                          @PathVariable Long facilityId,
+                          @RequestBody Booking booking) {
+        return service.createBooking(userId, facilityId, booking);
+    }
+
+    @DeleteMapping("/{id}")
+    public Booking cancel(@PathVariable Long id) {
+        return service.cancelBooking(id);
+    }
+
+    @GetMapping("/{id}")
+    public Booking get(@PathVariable Long id) {
+        return service.getBooking(id);
+    }
+}
