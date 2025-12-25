@@ -8,3 +8,26 @@
 // public interface BookingRepository extends JpaRepository<Booking,Long>{
     
 // }
+
+
+
+
+
+
+
+package com.example.demo.repository;
+
+import com.example.demo.model.*;
+import java.time.LocalDateTime;
+import java.util.*;
+
+public interface BookingRepository {
+    Optional<Booking> findById(Long id);
+    Booking save(Booking booking);
+
+    List<Booking> findByFacilityAndStartTimeLessThanAndEndTimeGreaterThan(
+            Facility facility,
+            LocalDateTime end,
+            LocalDateTime start
+    );
+}
