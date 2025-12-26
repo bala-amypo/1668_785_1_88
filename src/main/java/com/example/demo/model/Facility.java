@@ -1,29 +1,29 @@
-package com.example.demo.model;
+// package com.example.demo.model;
 
-import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+// import jakarta.persistence.*;
+// import lombok.Data;
+// import lombok.NoArgsConstructor;
+// import lombok.AllArgsConstructor;
+// import lombok.Builder;
 
-import java.util.List;
+// import java.util.List;
 
-@Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class Facility {
+// @Entity
+// @Data
+// @NoArgsConstructor
+// @AllArgsConstructor
+// @Builder
+// public class Facility {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+//     @Id
+//     @GeneratedValue(strategy = GenerationType.IDENTITY)
+//     private Long id;
 
-    @Column(unique = true)
-    private String name;
+//     @Column(unique = true)
+//     private String name;
 
-    private String description;
+//     private String description;
 
-    @OneToMany(mappedBy = "facility")
-    private List<Booking> bookings;
-}
+//     @OneToMany(mappedBy = "facility")
+//     private List<Booking> bookings;
+// }

@@ -1,14 +1,14 @@
-package com.example.demo.repository;
+// package com.example.demo.repository;
 
-import com.example.demo.model.BookingLog;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+// import com.example.demo.model.BookingLog;
+// import org.springframework.data.jpa.repository.JpaRepository;
+// import org.springframework.stereotype.Repository;
 
-import java.util.List;
+// import java.util.List;
 
-@Repository
-public interface BookingLogRepository extends JpaRepository<BookingLog, Long> {
+// @Repository
+// public interface BookingLogRepository extends JpaRepository<BookingLog, Long> {
 
-    // NEW query method
-    List<BookingLog> findAllByBookingIdOrderByCreatedAtAsc(Long bookingId);
-}
+//     // NEW query method
+//     List<BookingLog> findAllByBookingIdOrderByCreatedAtAsc(Long bookingId);
+// }

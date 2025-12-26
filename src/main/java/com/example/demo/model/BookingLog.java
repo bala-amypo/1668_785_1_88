@@ -1,25 +1,25 @@
-package com.example.demo.model;
+// package com.example.demo.model;
 
-import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+// import jakarta.persistence.*;
+// import lombok.Data;
+// import lombok.NoArgsConstructor;
+// import lombok.AllArgsConstructor;
 
-import java.time.LocalDateTime;
+// import java.time.LocalDateTime;
 
-@Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class BookingLog {
+// @Entity
+// @Data
+// @NoArgsConstructor
+// @AllArgsConstructor
+// public class BookingLog {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+//     @Id
+//     @GeneratedValue(strategy = GenerationType.IDENTITY)
+//     private Long id;
 
-    private Long bookingId; // stores Booking reference by ID
+//     private Long bookingId; // stores Booking reference by ID
 
-    private String logMessage;
+//     private String logMessage;
 
-    private LocalDateTime createdAt;
-}
+//     private LocalDateTime createdAt;
+// }
