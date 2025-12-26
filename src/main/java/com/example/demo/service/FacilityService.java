@@ -1,12 +1,14 @@
-// src/main/java/com/example/demo/service/ApartmentUnitService.java
+// src/main/java/com/example/demo/service/FacilityService.java
 package com.example.demo.service;
 
-import com.example.demo.model.ApartmentUnit;
+import com.example.demo.model.Facility;
+import java.util.List;
 
-public interface ApartmentUnitService {
-    ApartmentUnit assignUnitToUser(Long userId, ApartmentUnit unit);
-    ApartmentUnit getUnitByUser(Long userId);
+public interface FacilityService {
+    Facility addFacility(Facility facility);
+    List<Facility> getAllFacilities();
 }
+
 // // package com.example.demo.service;
 
 // // import java.util.List;

@@ -8,6 +8,7 @@ public interface BookingService {
     Booking cancelBooking(Long bookingId);
     Booking getBooking(Long bookingId);
 }
+
 // // package com.example.demo.service;
 
 // // import java.util.List;
