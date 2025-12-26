@@ -16,26 +16,12 @@ public class BookingLogServiceImpl implements BookingLogService {
         this.bookingLogRepository = bookingLogRepository;
     }
 
-    /**
-     * Adds a log entry for a booking
-     *
-     * @param bookingId ID of the booking
-     * @param message   Log message
-     */
     @Override
     public void addLog(Long bookingId, String message) {
         BookingLog log = new BookingLog();
-
-        // Set booking reference (assuming BookingLog has a booking field)
-        log.setBookingId(bookingId);  // or log.setBooking(booking) if you store full Booking object
-
-        // Set log message
+        log.setBookingId(bookingId); // Use bookingId field in BookingLog
         log.setLogMessage(message);
-
-        // Set timestamp
         log.setCreatedAt(LocalDateTime.now());
-
-        // Save log
         bookingLogRepository.save(log);
     }
 }
