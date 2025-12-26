@@ -1,29 +1,35 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.*;
 import com.example.demo.model.User;
-import com.example.demo.security.JwtTokenProvider;
-import com.example.demo.service.UserService;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
+import com.example.demo.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 
-    private final UserService userService;
-    private final JwtTokenProvider jwt;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public AuthController(UserService userService, JwtTokenProvider jwt) {
-        this.userService = userService;
-        this.jwt = jwt;
+    public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/register")
-    public User register(@RequestBody RegisterRequest r) {
-        return userService.register(
-                new User(null, r.getName(), r.getEmail(), r.getPassword(), "RESIDENT")
-        );
+    public User register(@RequestParam String username,
+                         @RequestParam String email,
+                         @RequestParam String password,
+                         @RequestParam(defaultValue = "USER") String role) {
+
+        // Encode the password
+        String encodedPassword = passwordEncoder.encode(password);
+
+        // Create new User
+        User user = new User(username, email, encodedPassword, role);
+
+        // Save to DB
+        return userRepository.save(user);
     }
 }
