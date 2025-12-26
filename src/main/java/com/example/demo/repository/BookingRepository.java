@@ -18,6 +18,26 @@ public interface BookingRepository {
             LocalDateTime endTimeGreaterThan
     );
 }
+// // src/main/java/com/example/demo/repository/BookingRepository.java
+// package com.example.demo.repository;
+
+// import com.example.demo.model.Booking;
+// import com.example.demo.model.Facility;
+
+// import java.time.LocalDateTime;
+// import java.util.List;
+// import java.util.Optional;
+
+// public interface BookingRepository {
+//     Booking save(Booking booking);
+//     Optional<Booking> findById(Long id);
+
+//     List<Booking> findByFacilityAndStartTimeLessThanAndEndTimeGreaterThan(
+//             Facility facility,
+//             LocalDateTime startTimeLessThan,
+//             LocalDateTime endTimeGreaterThan
+//     );
+// }
 // // package com.example.demo.repository;
 
 // // import org.springframework.data.jpa.repository.JpaRepository;
