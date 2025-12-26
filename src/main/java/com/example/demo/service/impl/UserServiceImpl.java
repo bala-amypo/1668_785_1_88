@@ -27,6 +27,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 }
+
 // package com.example.demo.service.impl;
 
 // import com.example.demo.model.User;

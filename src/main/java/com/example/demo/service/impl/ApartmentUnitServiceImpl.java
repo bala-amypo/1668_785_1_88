@@ -33,6 +33,7 @@ public class ApartmentUnitServiceImpl implements ApartmentUnitService {
         return apartmentUnitRepository.findByOwner(owner).orElseThrow();
     }
 }
+
 // // package com.example.demo.service.impl;
 
 // // import java.util.List;

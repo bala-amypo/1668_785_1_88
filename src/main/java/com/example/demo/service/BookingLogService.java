@@ -9,6 +9,7 @@ public interface BookingLogService {
     List<BookingLog> getLogsByBooking(Long bookingId);
 }
 
+
 // package com.example.demo.service;
 
 // import com.example.demo.model.BookingLog;

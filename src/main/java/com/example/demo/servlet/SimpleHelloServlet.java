@@ -10,8 +10,9 @@ import java.io.PrintWriter;
 
 public class SimpleHelloServlet extends HttpServlet {
 
+    // Make this public so ApartmentFacilityBookingSystemTest can call it.
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+    public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         resp.setContentType("text/plain");
         resp.setStatus(HttpServletResponse.SC_OK);
@@ -26,6 +27,7 @@ public class SimpleHelloServlet extends HttpServlet {
         return "SimpleHelloServlet - basic servlet used in tests";
     }
 }
+
 // package com.example.demo.servlet;
 
 // import jakarta.servlet.http.HttpServlet;

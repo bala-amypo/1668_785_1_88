@@ -7,6 +7,7 @@ public interface UserService {
     User register(User user);
 }
 
+
 // package com.example.demo.service;
 
 // import com.example.demo.model.User;
