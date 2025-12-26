@@ -41,16 +41,16 @@
 // }
 
 
-package com.example.demo.service.impl;
+// package com.example.demo.service.impl;
 
-import com.example.demo.exception.*;
-import com.example.demo.model.*;
-import com.example.demo.repository.*;
-import com.example.demo.service.BookingService;
-import com.example.demo.service.BookingLogService;
-import org.springframework.stereotype.Service;
+// import com.example.demo.exception.*;
+// import com.example.demo.model.*;
+// import com.example.demo.repository.*;
+// import com.example.demo.service.BookingService;
+// import com.example.demo.service.BookingLogService;
+// import org.springframework.stereotype.Service;
 
-import java.util.List;
+// import java.util.List;
 
 // @Service
 // public class BookingServiceImpl implements BookingService {
@@ -117,8 +117,23 @@ import java.util.List;
 
 
 
+package com.example.demo.service.impl;
 
+import com.example.demo.exception.ConflictException;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.model.Booking;
+import com.example.demo.model.BookingLog;
+import com.example.demo.model.Facility;
+import com.example.demo.model.User;
+import com.example.demo.repository.BookingRepository;
+import com.example.demo.repository.FacilityRepository;
+import com.example.demo.repository.UserRepository;
+import com.example.demo.service.BookingLogService;
+import com.example.demo.service.BookingService;
+import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class BookingServiceImpl implements BookingService {
@@ -138,5 +153,63 @@ public class BookingServiceImpl implements BookingService {
         this.facilityRepository = facilityRepository;
         this.userRepository = userRepository;
         this.bookingLogService = bookingLogService;
+    }
+
+    @Override
+    public Booking createBooking(Long facilityId, Long userId, Booking booking) {
+
+        Facility facility = facilityRepository.findById(facilityId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Facility not found with id " + facilityId));
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User not found with id " + userId));
+
+        // Check for overlapping bookings
+        List<Booking> conflicts =
+                bookingRepository.findByFacilityAndStartTimeLessThanAndEndTimeGreaterThan(
+                        facility,
+                        booking.getEndTime(),
+                        booking.getStartTime()
+                );
+
+        if (!conflicts.isEmpty()) {
+            throw new ConflictException("Facility already booked for the given time slot");
+        }
+
+        booking.setFacility(facility);
+        booking.setUser(user);
+        booking.setStatus(Booking.STATUS_CONFIRMED);
+
+        Booking savedBooking = bookingRepository.save(booking);
+
+        bookingLogService.addLog(savedBooking.getId(), "Booking created");
+
+        return savedBooking;
+    }
+
+    @Override
+    public Booking cancelBooking(Long bookingId) {
+
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Booking not found with id " + bookingId));
+
+        booking.setStatus(Booking.STATUS_CANCELLED);
+
+        Booking cancelledBooking = bookingRepository.save(booking);
+
+        bookingLogService.addLog(cancelledBooking.getId(), "Booking cancelled");
+
+        return cancelledBooking;
+    }
+
+    // ✅ THIS METHOD WAS MISSING — NOW FIXED
+    @Override
+    public Booking getBooking(Long bookingId) {
+        return bookingRepository.findById(bookingId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Booking not found with id " + bookingId));
     }
 }
