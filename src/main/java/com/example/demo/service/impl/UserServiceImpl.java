@@ -1,4 +1,3 @@
-// src/main/java/com/example/demo/service/impl/UserServiceImpl.java
 package com.example.demo.service.impl;
 
 import com.example.demo.exception.BadRequestException;
@@ -6,7 +5,9 @@ import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -21,65 +22,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public User register(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new BadRequestException("Email already exists");
+            throw new BadRequestException("duplicate email");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (user.getRole() == null) {
+            user.setRole("RESIDENT");
+        }
         return userRepository.save(user);
     }
+
+    @Override
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null);
+    }
 }
-// // src/main/java/com/example/demo/service/impl/UserServiceImpl.java
-// package com.example.demo.service.impl;
-
-// import com.example.demo.exception.BadRequestException;
-// import com.example.demo.model.User;
-// import com.example.demo.repository.UserRepository;
-// import com.example.demo.service.UserService;
-// import org.springframework.security.crypto.password.PasswordEncoder;
-
-// public class UserServiceImpl implements UserService {
-
-//     private final UserRepository userRepository;
-//     private final PasswordEncoder passwordEncoder;
-
-//     public UserServiceImpl(UserRepository userRepository,
-//                            PasswordEncoder passwordEncoder) {
-//         this.userRepository = userRepository;
-//         this.passwordEncoder = passwordEncoder;
-//     }
-
-//     @Override
-//     public User register(User user) {
-//         if (userRepository.existsByEmail(user.getEmail())) {
-//             throw new BadRequestException("Email already exists");
-//         }
-//         user.setPassword(passwordEncoder.encode(user.getPassword()));
-//         return userRepository.save(user);
-//     }
-// }
-
-// package com.example.demo.service.impl;
-
-// import com.example.demo.model.User;
-// import com.example.demo.repository.UserRepository;
-// import com.example.demo.service.UserService;
-// import org.springframework.security.crypto.password.PasswordEncoder;
-// import org.springframework.stereotype.Service;
-
-// @Service
-// public class UserServiceImpl implements UserService {
-
-//     private final UserRepository userRepository;
-//     private final PasswordEncoder passwordEncoder;
-
-//     public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-//         this.userRepository = userRepository;
-//         this.passwordEncoder = passwordEncoder;
-//     }
-
-//     @Override
-//     public User registerUser(String username, String email, String password, String role) {
-//         String encodedPassword = passwordEncoder.encode(password);
-//         User user = new User(username, email, encodedPassword, role);
-//         return userRepository.save(user);
-//     }
-// }
