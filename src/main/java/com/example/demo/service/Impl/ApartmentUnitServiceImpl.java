@@ -52,13 +52,14 @@ import com.example.demo.repository.UserRepository;
 import com.example.demo.service.ApartmentUnitService;
 import org.springframework.stereotype.Service;
 @Service
+
+
+
 @Override
 public ApartmentUnit getUnitByUser(Long userId) {
     return apartmentUnitRepository.findByOwnerId(userId)
             .orElseThrow(() -> new RuntimeException("Apartment unit not found for user"));
 }
-
-public class ApartmentUnitServiceImpl implements ApartmentUnitService {
 
     private final ApartmentUnitRepository apartmentUnitRepository;
     private final UserRepository userRepository;
