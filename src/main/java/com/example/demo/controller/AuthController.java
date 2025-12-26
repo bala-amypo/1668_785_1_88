@@ -1,35 +1,33 @@
-// package com.example.demo.controller;
+package com.example.demo.controller;
 
-// import com.example.demo.model.User;
-// import com.example.demo.repository.UserRepository;
-// import org.springframework.security.crypto.password.PasswordEncoder;
-// import org.springframework.web.bind.annotation.*;
+import com.example.demo.dto.*;
+import com.example.demo.model.User;
+import com.example.demo.security.JwtTokenProvider;
+import com.example.demo.service.UserService;
+import org.springframework.web.bind.annotation.*;
 
-// @RestController
-// @RequestMapping("/api/auth")
-// public class AuthController {
+@RestController
+@RequestMapping("/auth")
+public class AuthController {
 
-//     private final UserRepository userRepository;
-//     private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
+    private final JwtTokenProvider jwtTokenProvider;
 
-//     public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-//         this.userRepository = userRepository;
-//         this.passwordEncoder = passwordEncoder;
-//     }
+    public AuthController(UserService userService,
+                          JwtTokenProvider jwtTokenProvider) {
+        this.userService = userService;
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
 
-//     @PostMapping("/register")
-//     public User register(@RequestParam String username,
-//                          @RequestParam String email,
-//                          @RequestParam String password,
-//                          @RequestParam(defaultValue = "USER") String role) {
+    @PostMapping("/register")
+    public User register(@RequestBody RegisterRequest req) {
+        User u = new User(null, req.getName(),
+                req.getEmail(), req.getPassword(), "RESIDENT", null);
+        return userService.register(u);
+    }
 
-//         // Encode the password
-//         String encodedPassword = passwordEncoder.encode(password);
-
-//         // Create new User
-//         User user = new User(username, email, encodedPassword, role);
-
-//         // Save to DB
-//         return userRepository.save(user);
-//     }
-// }
+    @PostMapping("/login")
+    public LoginResponse login() {
+        return null;
+    }
+}
