@@ -13,13 +13,29 @@
 
 
 
+// package com.example.demo.service;
+
+// import com.example.demo.model.ApartmentUnit;
+
+// public interface ApartmentUnitService {
+
+//     ApartmentUnit assignUnitToUser(Long userId, ApartmentUnit unit);
+
+//     ApartmentUnit getUnitByUser(Long userId);
+// }
+
+
+
+
 package com.example.demo.service;
 
 import com.example.demo.model.ApartmentUnit;
 
 public interface ApartmentUnitService {
 
-    ApartmentUnit assignUnitToUser(Long userId, ApartmentUnit unit);
+    ApartmentUnit createUnit(String unitNumber, Integer floor, Long userId);
 
     ApartmentUnit getUnitByUser(Long userId);
+
+    ApartmentUnit assignUnitToUser(Long userId, ApartmentUnit unit);  // MUST match Impl
 }

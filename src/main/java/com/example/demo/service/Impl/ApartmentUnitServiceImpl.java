@@ -72,7 +72,6 @@
 
 
 
-
 package com.example.demo.service.impl;
 
 import com.example.demo.model.ApartmentUnit;
@@ -112,5 +111,14 @@ public class ApartmentUnitServiceImpl implements ApartmentUnitService {
     public ApartmentUnit getUnitByUser(Long userId) {
         return apartmentUnitRepository.findByOwnerId(userId)
                 .orElseThrow(() -> new RuntimeException("Unit not found for user"));
+    }
+
+    @Override
+    public ApartmentUnit assignUnitToUser(Long userId, ApartmentUnit unit) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        unit.setOwner(user);
+        return apartmentUnitRepository.save(unit);
     }
 }
