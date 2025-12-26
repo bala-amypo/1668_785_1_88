@@ -65,6 +65,7 @@ public class BookingServiceImpl implements BookingService {
         return bookingRepository.findById(bookingId).orElseThrow();
     }
 }
+
 // package com.example.demo.service.impl;
 
 // import com.example.demo.exception.ConflictException;

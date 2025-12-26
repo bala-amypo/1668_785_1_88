@@ -37,6 +37,7 @@ public class BookingLogServiceImpl implements BookingLogService {
         return bookingLogRepository.findByBookingOrderByLoggedAtAsc(booking);
     }
 }
+
 // package com.example.demo.service.impl;
 
 // import com.example.demo.model.BookingLog;
