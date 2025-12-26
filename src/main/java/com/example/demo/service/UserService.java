@@ -1,26 +1,8 @@
-// src/main/java/com/example/demo/service/UserService.java
 package com.example.demo.service;
 
 import com.example.demo.model.User;
 
 public interface UserService {
     User register(User user);
+    User findByEmail(String email);
 }
-// // src/main/java/com/example/demo/service/UserService.java
-// package com.example.demo.service;
-
-// import com.example.demo.model.User;
-
-// public interface UserService {
-//     User register(User user);
-// }
-
-
-// package com.example.demo.service;
-
-// import com.example.demo.model.User;
-
-// public interface UserService {
-//     // This method signature must exactly match the implementation in UserServiceImpl
-//     User registerUser(String username, String email, String password, String role);
-// }
