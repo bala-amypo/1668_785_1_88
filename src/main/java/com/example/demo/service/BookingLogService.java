@@ -8,6 +8,7 @@ public interface BookingLogService {
     BookingLog addLog(Long bookingId, String message);
     List<BookingLog> getLogsByBooking(Long bookingId);
 }
+
 // package com.example.demo.service;
 
 // import com.example.demo.model.BookingLog;
