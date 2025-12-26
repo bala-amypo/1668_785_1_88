@@ -1,3 +1,11 @@
+// src/main/java/com/example/demo/security/CustomUserDetailsService.java
+package com.example.demo.security;
+
+import org.springframework.security.core.userdetails.UserDetailsService;
+
+public interface CustomUserDetailsService extends UserDetailsService {
+    // no extra methods needed for tests
+}
 // package com.example.demo.security;
 
 // import com.example.demo.model.User;
