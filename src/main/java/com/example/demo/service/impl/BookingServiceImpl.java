@@ -1,27 +1,82 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.BookingLog;
-import com.example.demo.repository.BookingLogRepository;
+import com.example.demo.exception.ConflictException;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.model.Booking;
+import com.example.demo.model.Facility;
+import com.example.demo.model.User;
+import com.example.demo.repository.BookingRepository;
+import com.example.demo.repository.FacilityRepository;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.service.BookingLogService;
+import com.example.demo.service.BookingService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
-public class BookingLogServiceImpl implements BookingLogService {
+public class BookingServiceImpl implements BookingService {
 
-    private final BookingLogRepository bookingLogRepository;
+    private final BookingRepository bookingRepository;
+    private final FacilityRepository facilityRepository;
+    private final UserRepository userRepository;
+    private final BookingLogService bookingLogService;
 
-    public BookingLogServiceImpl(BookingLogRepository bookingLogRepository) {
-        this.bookingLogRepository = bookingLogRepository;
+    public BookingServiceImpl(BookingRepository bookingRepository,
+                              FacilityRepository facilityRepository,
+                              UserRepository userRepository,
+                              BookingLogService bookingLogService) {
+        this.bookingRepository = bookingRepository;
+        this.facilityRepository = facilityRepository;
+        this.userRepository = userRepository;
+        this.bookingLogService = bookingLogService;
     }
 
     @Override
-    public void addLog(Long bookingId, String message) {
-        BookingLog log = new BookingLog();
-        log.setBookingId(bookingId); // field in BookingLog
-        log.setLogMessage(message);
-        log.setCreatedAt(LocalDateTime.now());
-        bookingLogRepository.save(log);
+    public Booking createBooking(Long facilityId, Long userId, Booking booking) {
+        Facility facility = facilityRepository.findById(facilityId)
+                .orElseThrow(() -> new ResourceNotFoundException("Facility not found"));
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        // Check for overlapping bookings
+        List<Booking> conflicts = bookingRepository.findByFacilityAndStartTimeLessThanAndEndTimeGreaterThan(
+                facility, booking.getEndTime(), booking.getStartTime()
+        );
+
+        if (!conflicts.isEmpty()) {
+            throw new ConflictException("Facility already booked for this time slot");
+        }
+
+        booking.setFacility(facility);
+        booking.setUser(user);
+        booking.setStatus(Booking.STATUS_CONFIRMED);
+
+        Booking saved = bookingRepository.save(booking);
+
+        bookingLogService.addLog(saved.getId(), "Booking created");
+
+        return saved;
+    }
+
+    @Override
+    public Booking cancelBooking(Long bookingId) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
+
+        booking.setStatus(Booking.STATUS_CANCELLED);
+
+        Booking cancelledBooking = bookingRepository.save(booking);
+
+        bookingLogService.addLog(cancelledBooking.getId(), "Booking cancelled");
+
+        return cancelledBooking;
+    }
+
+    @Override
+    public Booking getBooking(Long bookingId) {
+        return bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
     }
 }
