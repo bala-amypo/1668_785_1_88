@@ -20,7 +20,7 @@ import com.example.demo.model.ApartmentUnit;
 import com.example.demo.model.User;
 import java.util.Optional;
 
-public interface ApartmentUnitRepository {
+public interface ApartmentUnitRepository extends JpaRepository<ApartmentUnit, Long> {
     ApartmentUnit save(ApartmentUnit unit);
     Optional<ApartmentUnit> findByOwner(User user);
 }
