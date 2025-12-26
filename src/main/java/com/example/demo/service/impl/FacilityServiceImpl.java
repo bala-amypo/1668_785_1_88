@@ -1,31 +1,31 @@
-package com.example.demo.service.impl;
+// package com.example.demo.service.impl;
 
-import com.example.demo.exception.ConflictException;
-import com.example.demo.model.Facility;
-import com.example.demo.repository.FacilityRepository;
-import com.example.demo.service.FacilityService;
-import org.springframework.stereotype.Service;
+// import com.example.demo.exception.ConflictException;
+// import com.example.demo.model.Facility;
+// import com.example.demo.repository.FacilityRepository;
+// import com.example.demo.service.FacilityService;
+// import org.springframework.stereotype.Service;
 
-import java.util.List;
+// import java.util.List;
 
-@Service
-public class FacilityServiceImpl implements FacilityService {
+// @Service
+// public class FacilityServiceImpl implements FacilityService {
 
-    private final FacilityRepository facilityRepository;
+//     private final FacilityRepository facilityRepository;
 
-    public FacilityServiceImpl(FacilityRepository facilityRepository) {
-        this.facilityRepository = facilityRepository;
-    }
+//     public FacilityServiceImpl(FacilityRepository facilityRepository) {
+//         this.facilityRepository = facilityRepository;
+//     }
 
-    @Override
-    public Facility addFacility(Facility facility) {
-        facilityRepository.findByName(facility.getName())
-                .ifPresent(f -> { throw new ConflictException("Facility already exists"); });
-        return facilityRepository.save(facility);
-    }
+//     @Override
+//     public Facility addFacility(Facility facility) {
+//         facilityRepository.findByName(facility.getName())
+//                 .ifPresent(f -> { throw new ConflictException("Facility already exists"); });
+//         return facilityRepository.save(facility);
+//     }
 
-    @Override
-    public List<Facility> getAllFacilities() {
-        return facilityRepository.findAll();
-    }
-}
+//     @Override
+//     public List<Facility> getAllFacilities() {
+//         return facilityRepository.findAll();
+//     }
+// }
