@@ -61,8 +61,6 @@
 
 
 
-
-
 package com.example.demo.model;
 
 import jakarta.persistence.*;
@@ -83,7 +81,7 @@ public class ApartmentUnit {
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User owner;   // ✅ YOUR ENTITY USER
+    private User owner;
 
     public ApartmentUnit() {}
 
@@ -94,5 +92,15 @@ public class ApartmentUnit {
         this.owner = owner;
     }
 
-    // getters/setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getUnitNumber() { return unitNumber; }
+    public void setUnitNumber(String unitNumber) { this.unitNumber = unitNumber; }
+
+    public Integer getFloor() { return floor; }
+    public void setFloor(Integer floor) { this.floor = floor; }
+
+    public User getOwner() { return owner; }
+    public void setOwner(User owner) { this.owner = owner; }
 }
