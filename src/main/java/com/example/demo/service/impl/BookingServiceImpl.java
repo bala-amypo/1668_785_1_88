@@ -19,7 +19,7 @@ public class BookingLogServiceImpl implements BookingLogService {
     @Override
     public void addLog(Long bookingId, String message) {
         BookingLog log = new BookingLog();
-        log.setBookingId(bookingId); // Use bookingId field in BookingLog
+        log.setBookingId(bookingId); // field in BookingLog
         log.setLogMessage(message);
         log.setCreatedAt(LocalDateTime.now());
         bookingLogRepository.save(log);
