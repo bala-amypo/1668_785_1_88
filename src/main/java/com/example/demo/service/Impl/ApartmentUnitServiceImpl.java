@@ -42,24 +42,48 @@
 
 
 
+// package com.example.demo.service.impl;
+
+// import com.example.demo.exception.ResourceNotFoundException;
+// import com.example.demo.model.ApartmentUnit;
+// import com.example.demo.model.User;
+// import com.example.demo.repository.ApartmentUnitRepository;
+// import com.example.demo.repository.UserRepository;
+// import com.example.demo.service.ApartmentUnitService;
+// import org.springframework.stereotype.Service;
+// @Service
+
+
+// public class ApartmentUnitServiceImpl implements ApartmentUnitService {
+
+
+//     private final ApartmentUnitRepository apartmentUnitRepository;
+//     private final UserRepository userRepository;
+
+//     public ApartmentUnitServiceImpl(
+//             ApartmentUnitRepository apartmentUnitRepository,
+//             UserRepository userRepository) {
+//         this.apartmentUnitRepository = apartmentUnitRepository;
+//         this.userRepository = userRepository;
+//     }
+// }
+
+
+
+
+
+
 package com.example.demo.service.impl;
 
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.ApartmentUnit;
 import com.example.demo.model.User;
 import com.example.demo.repository.ApartmentUnitRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.ApartmentUnitService;
 import org.springframework.stereotype.Service;
+
 @Service
-
-
-
-@Override
-public ApartmentUnit getUnitByUser(Long userId) {
-    return apartmentUnitRepository.findByOwnerId(userId)
-            .orElseThrow(() -> new RuntimeException("Apartment unit not found for user"));
-}
+public class ApartmentUnitServiceImpl implements ApartmentUnitService {
 
     private final ApartmentUnitRepository apartmentUnitRepository;
     private final UserRepository userRepository;
@@ -69,5 +93,24 @@ public ApartmentUnit getUnitByUser(Long userId) {
             UserRepository userRepository) {
         this.apartmentUnitRepository = apartmentUnitRepository;
         this.userRepository = userRepository;
+    }
+
+    @Override
+    public ApartmentUnit createUnit(String unitNumber, Integer floor, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        ApartmentUnit unit = new ApartmentUnit();
+        unit.setUnitNumber(unitNumber);
+        unit.setFloor(floor);
+        unit.setOwner(user);
+
+        return apartmentUnitRepository.save(unit);
+    }
+
+    @Override
+    public ApartmentUnit getUnitByUser(Long userId) {
+        return apartmentUnitRepository.findByOwnerId(userId)
+                .orElseThrow(() -> new RuntimeException("Unit not found for user"));
     }
 }
