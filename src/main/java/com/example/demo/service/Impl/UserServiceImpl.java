@@ -94,7 +94,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User register(User user) {
         if (repo.existsByEmail(user.getEmail())) {
-            throw new ConflictException("Email already exists");
+            throw new RuntimeException("Email already exists");
         }
         user.setPassword(encoder.encode(user.getPassword()));
         return repo.save(user);
@@ -106,3 +106,5 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 }
+
+
