@@ -24,3 +24,6 @@ public interface ApartmentUnitRepository {
     ApartmentUnit save(ApartmentUnit unit);
     Optional<ApartmentUnit> findByOwner(User user);
 }
+
+
+
