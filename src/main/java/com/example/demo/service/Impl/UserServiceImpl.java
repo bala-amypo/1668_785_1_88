@@ -71,40 +71,57 @@
 
 
 
-package com.example.demo.service.impl;
+// package com.example.demo.service.impl;
 
-import com.example.demo.exception.*;
-import com.example.demo.model.User;
-import com.example.demo.repository.UserRepository;
-import com.example.demo.service.UserService;
+// import com.example.demo.exception.*;
+// import com.example.demo.model.User;
+// import com.example.demo.repository.UserRepository;
+// import com.example.demo.service.UserService;
+// import org.springframework.security.crypto.password.PasswordEncoder;
+// import org.springframework.stereotype.Service;
+
+// @Service
+// public class UserServiceImpl implements UserService {
+
+//     private final UserRepository repo;
+//     private final PasswordEncoder encoder;
+
+//     public UserServiceImpl(UserRepository repo, PasswordEncoder encoder) {
+//         this.repo = repo;
+//         this.encoder = encoder;
+//     }
+
+//     @Override
+//     public User register(User user) {
+//         if (repo.existsByEmail(user.getEmail())) {
+//             throw new RuntimeException("Email already exists");
+//         }
+//         user.setPassword(encoder.encode(user.getPassword()));
+//         return repo.save(user);
+//     }
+
+//     @Override
+//     public User getUser(Long id) {
+//         return repo.findById(id)
+//                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+//     }
+// }
+
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl {
 
-    private final UserRepository repo;
-    private final PasswordEncoder encoder;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository repo, PasswordEncoder encoder) {
-        this.repo = repo;
-        this.encoder = encoder;
+    public UserServiceImpl(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
     }
 
-    @Override
-    public User register(User user) {
-        if (repo.existsByEmail(user.getEmail())) {
-            throw new RuntimeException("Email already exists");
-        }
-        user.setPassword(encoder.encode(user.getPassword()));
-        return repo.save(user);
-    }
-
-    @Override
-    public User getUser(Long id) {
-        return repo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    public void registerUser(String rawPassword) {
+        String hashedPassword = passwordEncoder.encode(rawPassword);
+        // save hashedPassword to DB
     }
 }
-
-
