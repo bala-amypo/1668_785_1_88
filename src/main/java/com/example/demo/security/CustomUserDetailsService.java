@@ -2,7 +2,8 @@ package com.example.demo.security;
 
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
-import org.springframework.security.core.userdetails.*;
+import com.example.demo.model.User;
+
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.List;
