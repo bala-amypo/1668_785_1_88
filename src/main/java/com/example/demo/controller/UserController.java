@@ -15,7 +15,11 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public User register(@RequestParam String username, @RequestParam String password) {
-        return userService.registerUser(username, password);
+    public User register(@RequestParam String username,
+                         @RequestParam String email,
+                         @RequestParam String password,
+                         @RequestParam(defaultValue = "USER") String role) {
+
+        return userService.registerUser(username, email, password, role);
     }
 }
