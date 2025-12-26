@@ -1,95 +1,33 @@
-// package com.example.demo.service.impl;
-
-// import java.util.List;
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.stereotype.Service;   
-// import com.example.demo.model.BookingLog;
-// import com.example.demo.repository.BookingLogRepository;
-// import org.springframework.web.bind.annotation.PathVariable;
-// import com.example.demo.service.BookingLogService;                
-
-// @Service
-// public class BookingLogServiceImpl implements BookingLogService{
-
-//     @Autowired BookingLogRepository used;
-//     @Override
-//     public BookingLog postData4(BookingLog use){
-//         return used.save(use);  
-//     }
-   
-//     @Override
-//     public List<BookingLog>getAllData4(){
-//         return used.findAll();
-//     }
-//     @Override
-//     public String DeleteData4(Long id){
-//         used.deleteById(id);
-//         return "Deleted successfully";
-//     }
-//     @Override
-//     public BookingLog getData4(Long id){
-//     return used.findById(id).orElse(null);
-//     }
-//     @Override
-//     public BookingLog updateData4(Long id,BookingLog entity){
-//         if(used.existsById(id)){
-//             entity.setId(id);
-//             return used.save(entity);
-//         } 
-//         return null;
-//     }
-// }
-
-
 package com.example.demo.service.impl;
 
-import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.model.Booking;
 import com.example.demo.model.BookingLog;
 import com.example.demo.repository.BookingLogRepository;
-import com.example.demo.repository.BookingRepository;
 import com.example.demo.service.BookingLogService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class BookingLogServiceImpl implements BookingLogService {
 
     private final BookingLogRepository bookingLogRepository;
-    private final BookingRepository bookingRepository;
 
-    public BookingLogServiceImpl(
-            BookingLogRepository bookingLogRepository,
-            BookingRepository bookingRepository) {
-
+    public BookingLogServiceImpl(BookingLogRepository bookingLogRepository) {
         this.bookingLogRepository = bookingLogRepository;
-        this.bookingRepository = bookingRepository;
     }
 
     @Override
-    public BookingLog addLog(Long bookingId, String message) {
-
-        Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Booking not found with id " + bookingId));
-
+    public void addLog(Long bookingId, String message) {
         BookingLog log = new BookingLog();
-        log.setBooking(booking);
+        log.setBookingId(bookingId);
         log.setLogMessage(message);
-
-        return bookingLogRepository.save(log);
+        log.setCreatedAt(LocalDateTime.now());
+        bookingLogRepository.save(log);
     }
 
     @Override
     public List<BookingLog> getLogsByBooking(Long bookingId) {
-
-        Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Booking not found with id " + bookingId));
-
-        return bookingLogRepository.findByBookingOrderByLoggedAtAsc(booking);
+        return bookingLogRepository.findAllByBookingIdOrderByCreatedAtAsc(bookingId);
     }
 }
