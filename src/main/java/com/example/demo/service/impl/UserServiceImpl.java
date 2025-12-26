@@ -18,10 +18,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User registerUser(String username, String password) {
-        // Encode the password before saving
+    public User registerUser(String username, String email, String password, String role) {
+        // Encode password
         String encodedPassword = passwordEncoder.encode(password);
-        User user = new User(username, encodedPassword);
+
+        // Create User using the correct constructor
+        User user = new User(username, email, encodedPassword, role);
+
+        // Save to DB
         return userRepository.save(user);
     }
 }
