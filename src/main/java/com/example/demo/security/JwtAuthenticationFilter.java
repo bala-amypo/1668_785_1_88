@@ -1,17 +1,16 @@
+package com.example.demo.security;
 
-// package com.example.demo.security;
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
-// import jakarta.servlet.*;
-// import jakarta.servlet.http.HttpServletRequest;
-// import java.io.IOException;
+public class JwtAuthenticationFilter implements Filter {
 
-// public class JwtAuthenticationFilter implements Filter {
-
-//     @Override
-//     public void doFilter(ServletRequest request,
-//                          ServletResponse response,
-//                          FilterChain chain)
-//             throws IOException, ServletException {
-//         chain.doFilter(request, response);
-//     }
-// }
+    @Override
+    public void doFilter(ServletRequest request,
+                         ServletResponse response,
+                         FilterChain chain)
+            throws IOException, ServletException {
+        chain.doFilter(request, response);
+    }
+}
