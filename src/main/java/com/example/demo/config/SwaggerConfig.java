@@ -4,6 +4,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import java.util.List;
 
 
@@ -12,6 +13,10 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI customOpenAPI() {
+    SecurityScheme bearerAuth = new SecurityScheme()
+                .type(SecurityScheme.Type.HTTP)
+                .scheme("bearer")
+                .bearerFormat("JWT");
         return new OpenAPI()
                 // You need to change the port as per your server
                 .servers(List.of(
