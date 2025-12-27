@@ -13,8 +13,6 @@ public class JwtTokenProvider {
 
     private final Key key;
     private final long expirationMs;
-
-    // ✅ Spring injects values from application.properties
     public JwtTokenProvider(
             @Value("${jwt.secret}") String secret,
             @Value("${jwt.expiration}") long expirationMs) {
