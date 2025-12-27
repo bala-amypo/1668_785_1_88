@@ -2,7 +2,7 @@ package com.example.demo.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.security.core.Authentication;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -14,12 +14,16 @@ public class JwtTokenProvider {
     private final Key key;
     private final long expirationMs;
 
-    public JwtTokenProvider(String secret, long expirationMs) {
+    // ✅ Spring injects values from application.properties
+    public JwtTokenProvider(
+            @Value("${jwt.secret}") String secret,
+            @Value("${jwt.expiration}") long expirationMs) {
+
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
         this.expirationMs = expirationMs;
     }
 
-    public String generateToken(Authentication auth,
+    public String generateToken(org.springframework.security.core.Authentication auth,
                                 Long userId,
                                 String email,
                                 String role) {
@@ -36,7 +40,10 @@ public class JwtTokenProvider {
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             return false;
@@ -66,6 +73,7 @@ public class JwtTokenProvider {
                 .getBody();
     }
 }
+
 // package com.example.demo.security;
 
 // import io.jsonwebtoken.*;
