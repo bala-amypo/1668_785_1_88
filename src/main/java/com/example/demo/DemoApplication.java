@@ -46,7 +46,7 @@ public class DemoApplication {
 		SpringApplication.run(DemoApplication.class, args);
 		System.out.println(new BCryptPasswordEncoder().encode("mahita"));
 		BCryptPasswordEncoder encoder=new BCryptPasswordEncoder();
-		if(encoder.matches("mahita", "$2a$10$g2vtDwCi1RQ7.4EjUifYIOppaErvlCApt05MH4rvo/PhDQLgMPc7C")){
+		if(encoder.matches("pavi", "$2a$10$g2vtDwCi1RQ7.4EjUifYIOppaErvlCApt05MH4rvo/PhDQLgMPc7C")){
 			System.out.println("password matched");
 		}else{
 			System.out.println("no match");
