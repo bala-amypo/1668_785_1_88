@@ -25,19 +25,17 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-            // 🔴 REQUIRED for Swagger POST calls
             .csrf(csrf -> csrf.disable())
 
-            // 🔴 JWT = STATELESS
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
 
             .authorizeHttpRequests(auth -> auth
 
-                // 🔓 PUBLIC ENDPOINTS
+                
                 .requestMatchers(
-                    "/api/auth/**",
+                    "/auth/**",
                     "/swagger-ui/**",
                     "/swagger-ui.html",
                     "/v3/api-docs/**"
