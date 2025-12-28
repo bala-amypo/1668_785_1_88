@@ -335,7 +335,7 @@ public class JwtTokenProvider {
         this.expirationMs = expirationMs;
     }
 
-    // ✅ METHOD YOUR CONTROLLER USES
+    // ================= TOKEN GENERATION =================
     public String createToken(String email, String role) {
 
         return Jwts.builder()
@@ -345,5 +345,35 @@ public class JwtTokenProvider {
                 .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    // ================= TOKEN VALIDATION =================
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    // ================= TOKEN DATA EXTRACTION =================
+    public String getEmailFromToken(String token) {
+        return getClaims(token).getSubject();
+    }
+
+    public String getRoleFromToken(String token) {
+        return getClaims(token).get("role", String.class);
+    }
+
+    private Claims getClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 }
