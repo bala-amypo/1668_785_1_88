@@ -3,9 +3,13 @@ package com.example.demo.controller;
 import com.example.demo.model.ApartmentUnit;
 import com.example.demo.service.ApartmentUnitService;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 
 @RestController
 @RequestMapping("/units")
+@SecurityRequirement(name = "bearerAuth")
+
 public class ApartmentUnitController {
 
     private final ApartmentUnitService service;

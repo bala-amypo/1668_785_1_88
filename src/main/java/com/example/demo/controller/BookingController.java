@@ -3,9 +3,13 @@ package com.example.demo.controller;
 import com.example.demo.model.Booking;
 import com.example.demo.service.BookingService;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 
 @RestController
 @RequestMapping("/bookings")
+@SecurityRequirement(name = "bearerAuth")
+
 public class BookingController {
 
     private final BookingService service;
