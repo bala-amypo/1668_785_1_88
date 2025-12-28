@@ -2,7 +2,7 @@ package com.example.demo.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -14,19 +14,19 @@ public class JwtTokenProvider {
     private final Key key;
     private final long expirationMs;
 
-    public JwtTokenProvider(
-            @Value("${jwt.secret}") String secret,
-            @Value("${jwt.expiration}") long expirationMs) {
-
+    public JwtTokenProvider(String secret, long expirationMs) {
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
         this.expirationMs = expirationMs;
     }
 
-    // ================= TOKEN GENERATION =================
-    public String createToken(String email, String role) {
+    public String generateToken(Authentication authentication,
+                                Long userId,
+                                String email,
+                                String role) {
 
         return Jwts.builder()
-                .setSubject(email)
+                .setSubject(String.valueOf(userId))
+                .claim("email", email)
                 .claim("role", role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
@@ -34,7 +34,6 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    // ================= TOKEN VALIDATION =================
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
@@ -42,14 +41,17 @@ public class JwtTokenProvider {
                     .build()
                     .parseClaimsJws(token);
             return true;
-        } catch (JwtException | IllegalArgumentException e) {
+        } catch (Exception e) {
             return false;
         }
     }
 
-    // ================= TOKEN DATA EXTRACTION =================
+    public Long getUserIdFromToken(String token) {
+        return Long.parseLong(getClaims(token).getSubject());
+    }
+
     public String getEmailFromToken(String token) {
-        return getClaims(token).getSubject();
+        return getClaims(token).get("email", String.class);
     }
 
     public String getRoleFromToken(String token) {
@@ -64,6 +66,72 @@ public class JwtTokenProvider {
                 .getBody();
     }
 }
+// package com.example.demo.security;
+
+// import io.jsonwebtoken.*;
+// import io.jsonwebtoken.security.Keys;
+// import org.springframework.beans.factory.annotation.Value;
+// import org.springframework.stereotype.Component;
+
+// import java.security.Key;
+// import java.util.Date;
+
+// @Component
+// public class JwtTokenProvider {
+
+//     private final Key key;
+//     private final long expirationMs;
+
+//     public JwtTokenProvider(
+//             @Value("${jwt.secret}") String secret,
+//             @Value("${jwt.expiration}") long expirationMs) {
+
+//         this.key = Keys.hmacShaKeyFor(secret.getBytes());
+//         this.expirationMs = expirationMs;
+//     }
+
+//     // ================= TOKEN GENERATION =================
+//     public String createToken(String email, String role) {
+
+//         return Jwts.builder()
+//                 .setSubject(email)
+//                 .claim("role", role)
+//                 .setIssuedAt(new Date())
+//                 .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
+//                 .signWith(key, SignatureAlgorithm.HS256)
+//                 .compact();
+//     }
+
+//     // ================= TOKEN VALIDATION =================
+//     public boolean validateToken(String token) {
+//         try {
+//             Jwts.parserBuilder()
+//                     .setSigningKey(key)
+//                     .build()
+//                     .parseClaimsJws(token);
+//             return true;
+//         } catch (JwtException | IllegalArgumentException e) {
+//             return false;
+//         }
+//     }
+
+//     // ================= TOKEN DATA EXTRACTION =================
+//     public String getEmailFromToken(String token) {
+//         return getClaims(token).getSubject();
+//     }
+
+//     public String getRoleFromToken(String token) {
+//         return getClaims(token).get("role", String.class);
+//     }
+
+//     private Claims getClaims(String token) {
+//         return Jwts.parserBuilder()
+//                 .setSigningKey(key)
+//                 .build()
+//                 .parseClaimsJws(token)
+//                 .getBody();
+//     }
+// }
 // package com.example.demo.security;
 
 // import io.jsonwebtoken.*;
