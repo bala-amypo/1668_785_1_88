@@ -25,7 +25,6 @@ public class SecurityConfig {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
-    // ✅ THIS FIXES YOUR ERROR
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
