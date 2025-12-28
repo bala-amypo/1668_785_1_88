@@ -105,6 +105,78 @@
 //         );
 //     }
 // }
+// package com.example.demo.controller;
+
+// import com.example.demo.dto.LoginRequest;
+// import com.example.demo.dto.LoginResponse;
+// import com.example.demo.dto.RegisterRequest;
+// import com.example.demo.model.User;
+// import com.example.demo.security.JwtTokenProvider;
+// import com.example.demo.service.UserService;
+// import org.springframework.security.crypto.password.PasswordEncoder;
+// import org.springframework.web.bind.annotation.*;
+
+// @RestController
+// @RequestMapping("/auth")
+// public class AuthController {
+
+//     private final UserService userService;
+//     private final JwtTokenProvider jwtTokenProvider;
+//     private final PasswordEncoder passwordEncoder;
+
+//     public AuthController(UserService userService,
+//                           JwtTokenProvider jwtTokenProvider,
+//                           PasswordEncoder passwordEncoder) {
+//         this.userService = userService;
+//         this.jwtTokenProvider = jwtTokenProvider;
+//         this.passwordEncoder = passwordEncoder;
+//     }
+
+//     // ================= REGISTER =================
+//     @PostMapping(value = "/register", consumes = "application/json", produces = "application/json")
+//     public User register(@RequestBody RegisterRequest request) {
+
+//         User user = new User(
+//                 null,
+//                 request.getName(),
+//                 request.getEmail(),
+//                 passwordEncoder.encode(request.getPassword()), // ✅ HASHED
+//                 "RESIDENT",
+//                 null
+//         );
+
+//         return userService.register(user);
+//     }
+
+//     // ================= LOGIN =================
+//     @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
+//     public LoginResponse login(@RequestBody LoginRequest request) {
+
+//         User user = userService.findByEmail(request.getEmail());
+
+//         // ✅ CORRECT password validation
+//         if (user == null || !passwordEncoder.matches(
+//                 request.getPassword(),
+//                 user.getPassword()
+//         )) {
+//             throw new RuntimeException("Invalid email or password");
+//         }
+
+//         // ✅ CORRECT token generation
+//         String token = jwtTokenProvider.generateToken(
+//                 user.getId(),
+//                 user.getEmail(),
+//                 user.getRole()
+//         );
+
+//         return new LoginResponse(
+//                 token,
+//                 user.getId(),
+//                 user.getEmail(),
+//                 user.getRole()
+//         );
+//     }
+// }
 package com.example.demo.controller;
 
 import com.example.demo.dto.LoginRequest;
@@ -136,16 +208,17 @@ public class AuthController {
     @PostMapping(value = "/register", consumes = "application/json", produces = "application/json")
     public User register(@RequestBody RegisterRequest request) {
 
+        // ❌ DO NOT encode password here
         User user = new User(
                 null,
                 request.getName(),
                 request.getEmail(),
-                passwordEncoder.encode(request.getPassword()), // ✅ HASHED
+                request.getPassword(), // plain password
                 "RESIDENT",
                 null
         );
 
-        return userService.register(user);
+        return userService.register(user); // encoded in service
     }
 
     // ================= LOGIN =================
@@ -154,7 +227,6 @@ public class AuthController {
 
         User user = userService.findByEmail(request.getEmail());
 
-        // ✅ CORRECT password validation
         if (user == null || !passwordEncoder.matches(
                 request.getPassword(),
                 user.getPassword()
@@ -162,9 +234,8 @@ public class AuthController {
             throw new RuntimeException("Invalid email or password");
         }
 
-        // ✅ CORRECT token generation
-        String token = jwtTokenProvider.generateToken(
-                user.getId(),
+        // ✅ Correct JWT method
+        String token = jwtTokenProvider.createToken(
                 user.getEmail(),
                 user.getRole()
         );
