@@ -147,6 +147,96 @@
 // //                 .getBody();
 // //     }
 // // }
+// package com.example.demo.security;
+
+// import io.jsonwebtoken.*;
+// import io.jsonwebtoken.security.Keys;
+// import org.springframework.beans.factory.annotation.Value;
+// import org.springframework.stereotype.Component;
+
+// import java.security.Key;
+// import java.util.Date;
+
+// @Component
+// public class JwtTokenProvider {
+
+//     private final Key key;
+//     private final long expirationMs;
+
+//     public JwtTokenProvider(
+//             @Value("${jwt.secret}") String secret,
+//             @Value("${jwt.expiration}") long expirationMs) {
+
+//         this.key = Keys.hmacShaKeyFor(secret.getBytes());
+//         this.expirationMs = expirationMs;
+//     }
+
+//     // =================== NEW SIMPLE TOKEN METHOD ===================
+//     public String createToken(String email, String role) {
+//         return Jwts.builder()
+//                 .setSubject(email)
+//                 .claim("email", email)
+//                 .claim("role", role)
+//                 .setIssuedAt(new Date())
+//                 .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
+//                 .signWith(key, SignatureAlgorithm.HS256)
+//                 .compact();
+//     }
+
+//     // =================== EXISTING ADVANCED TOKEN METHOD ===================
+//     public String generateToken(org.springframework.security.core.Authentication auth,
+//                                 Long userId,
+//                                 String email,
+//                                 String role) {
+
+//         return Jwts.builder()
+//                 .setSubject(userId.toString())
+//                 .claim("email", email)
+//                 .claim("role", role)
+//                 .setIssuedAt(new Date())
+//                 .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
+//                 .signWith(key, SignatureAlgorithm.HS256)
+//                 .compact();
+//     }
+
+//     // =================== TOKEN VALIDATION ===================
+//     public boolean validateToken(String token) {
+//         try {
+//             Jwts.parserBuilder()
+//                     .setSigningKey(key)
+//                     .build()
+//                     .parseClaimsJws(token);
+//             return true;
+//         } catch (JwtException | IllegalArgumentException e) {
+//             return false;
+//         }
+//     }
+
+//     // =================== GET DATA FROM TOKEN ===================
+//     public Long getUserIdFromToken(String token) {
+//         Claims claims = parse(token);
+//         return claims.get("userId", Long.class) != null
+//                 ? claims.get("userId", Long.class)
+//                 : Long.valueOf(claims.getSubject());
+//     }
+
+//     public String getEmailFromToken(String token) {
+//         return parse(token).get("email", String.class);
+//     }
+
+//     public String getRoleFromToken(String token) {
+//         return parse(token).get("role", String.class);
+//     }
+
+//     // =================== HELPER METHOD ===================
+//     private Claims parse(String token) {
+//         return Jwts.parserBuilder()
+//                 .setSigningKey(key)
+//                 .build()
+//                 .parseClaimsJws(token)
+//                 .getBody();
+//     }
+// }
 package com.example.demo.security;
 
 import io.jsonwebtoken.*;
@@ -167,30 +257,17 @@ public class JwtTokenProvider {
             @Value("${jwt.secret}") String secret,
             @Value("${jwt.expiration}") long expirationMs) {
 
+        // HS256 requires at least 32 bytes secret
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
         this.expirationMs = expirationMs;
     }
 
-    // =================== NEW SIMPLE TOKEN METHOD ===================
-    public String createToken(String email, String role) {
-        return Jwts.builder()
-                .setSubject(email)
-                .claim("email", email)
-                .claim("role", role)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
-    }
-
-    // =================== EXISTING ADVANCED TOKEN METHOD ===================
-    public String generateToken(org.springframework.security.core.Authentication auth,
-                                Long userId,
-                                String email,
-                                String role) {
+    // =================== TOKEN GENERATION ===================
+    public String generateToken(Long userId, String email, String role) {
 
         return Jwts.builder()
-                .setSubject(userId.toString())
+                .setSubject(userId.toString())       // subject = userId
+                .claim("userId", userId)
                 .claim("email", email)
                 .claim("role", role)
                 .setIssuedAt(new Date())
@@ -207,29 +284,26 @@ public class JwtTokenProvider {
                     .build()
                     .parseClaimsJws(token);
             return true;
-        } catch (JwtException | IllegalArgumentException e) {
+        } catch (JwtException | IllegalArgumentException ex) {
             return false;
         }
     }
 
-    // =================== GET DATA FROM TOKEN ===================
+    // =================== READ DATA FROM TOKEN ===================
     public Long getUserIdFromToken(String token) {
-        Claims claims = parse(token);
-        return claims.get("userId", Long.class) != null
-                ? claims.get("userId", Long.class)
-                : Long.valueOf(claims.getSubject());
+        return parseClaims(token).get("userId", Long.class);
     }
 
     public String getEmailFromToken(String token) {
-        return parse(token).get("email", String.class);
+        return parseClaims(token).get("email", String.class);
     }
 
     public String getRoleFromToken(String token) {
-        return parse(token).get("role", String.class);
+        return parseClaims(token).get("role", String.class);
     }
 
-    // =================== HELPER METHOD ===================
-    private Claims parse(String token) {
+    // =================== INTERNAL PARSER ===================
+    private Claims parseClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
