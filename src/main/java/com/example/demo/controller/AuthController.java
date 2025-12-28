@@ -1,3 +1,71 @@
+package com.example.demo.controller;
+
+import com.example.demo.dto.LoginRequest;
+import com.example.demo.dto.LoginResponse;
+import com.example.demo.dto.RegisterRequest;
+import com.example.demo.model.User;
+import com.example.demo.security.JwtTokenProvider;
+import com.example.demo.service.UserService;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/auth")
+public class AuthController {
+
+    private final UserService userService;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final PasswordEncoder passwordEncoder;
+
+    public AuthController(UserService userService,
+                          JwtTokenProvider jwtTokenProvider,
+                          PasswordEncoder passwordEncoder) {
+        this.userService = userService;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @PostMapping("/register")
+    public User register(@RequestBody RegisterRequest request) {
+
+        User user = new User(
+                null,
+                request.getName(),
+                request.getEmail(),
+                request.getPassword(),
+                "RESIDENT",
+                null
+        );
+
+        return userService.register(user);
+    }
+
+    @PostMapping("/login")
+    public LoginResponse login(@RequestBody LoginRequest request) {
+
+        User user = userService.findByEmail(request.getEmail());
+
+        if (user == null || !passwordEncoder.matches(
+                request.getPassword(),
+                user.getPassword())) {
+            throw new RuntimeException("Invalid email or password");
+        }
+
+        String token = jwtTokenProvider.generateToken(
+                null,
+                user.getId(),
+                user.getEmail(),
+                user.getRole()
+        );
+
+        return new LoginResponse(
+                token,
+                user.getId(),
+                user.getEmail(),
+                user.getRole()
+        );
+    }
+}
 // package com.example.demo.controller;
 
 // import com.example.demo.dto.*;
@@ -177,74 +245,74 @@
 //         );
 //     }
 // }
-package com.example.demo.controller;
+// package com.example.demo.controller;
 
-import com.example.demo.dto.LoginRequest;
-import com.example.demo.dto.LoginResponse;
-import com.example.demo.dto.RegisterRequest;
-import com.example.demo.model.User;
-import com.example.demo.security.JwtTokenProvider;
-import com.example.demo.service.UserService;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+// import com.example.demo.dto.LoginRequest;
+// import com.example.demo.dto.LoginResponse;
+// import com.example.demo.dto.RegisterRequest;
+// import com.example.demo.model.User;
+// import com.example.demo.security.JwtTokenProvider;
+// import com.example.demo.service.UserService;
+// import org.springframework.security.crypto.password.PasswordEncoder;
+// import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("/auth")
-public class AuthController {
+// @RestController
+// @RequestMapping("/auth")
+// public class AuthController {
 
-    private final UserService userService;
-    private final JwtTokenProvider jwtTokenProvider;
-    private final PasswordEncoder passwordEncoder;
+//     private final UserService userService;
+//     private final JwtTokenProvider jwtTokenProvider;
+//     private final PasswordEncoder passwordEncoder;
 
-    public AuthController(UserService userService,
-                          JwtTokenProvider jwtTokenProvider,
-                          PasswordEncoder passwordEncoder) {
-        this.userService = userService;
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.passwordEncoder = passwordEncoder;
-    }
+//     public AuthController(UserService userService,
+//                           JwtTokenProvider jwtTokenProvider,
+//                           PasswordEncoder passwordEncoder) {
+//         this.userService = userService;
+//         this.jwtTokenProvider = jwtTokenProvider;
+//         this.passwordEncoder = passwordEncoder;
+//     }
 
-    // ================= REGISTER =================
-    @PostMapping(value = "/register", consumes = "application/json", produces = "application/json")
-    public User register(@RequestBody RegisterRequest request) {
+//     // ================= REGISTER =================
+//     @PostMapping(value = "/register", consumes = "application/json", produces = "application/json")
+//     public User register(@RequestBody RegisterRequest request) {
 
         
-        User user = new User(
-                null,
-                request.getName(),
-                request.getEmail(),
-                request.getPassword(), // plain password
-                "RESIDENT",
-                null
-        );
+//         User user = new User(
+//                 null,
+//                 request.getName(),
+//                 request.getEmail(),
+//                 request.getPassword(), // plain password
+//                 "RESIDENT",
+//                 null
+//         );
 
-        return userService.register(user); // encoded in service
-    }
+//         return userService.register(user); // encoded in service
+//     }
 
    
-    @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
-    public LoginResponse login(@RequestBody LoginRequest request) {
+//     @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
+//     public LoginResponse login(@RequestBody LoginRequest request) {
 
-        User user = userService.findByEmail(request.getEmail());
+//         User user = userService.findByEmail(request.getEmail());
 
-        if (user == null || !passwordEncoder.matches(
-                request.getPassword(),
-                user.getPassword()
-        )) {
-            throw new RuntimeException("Invalid email or password");
-        }
+//         if (user == null || !passwordEncoder.matches(
+//                 request.getPassword(),
+//                 user.getPassword()
+//         )) {
+//             throw new RuntimeException("Invalid email or password");
+//         }
 
         
-        String token = jwtTokenProvider.createToken(
-                user.getEmail(),
-                user.getRole()
-        );
+//         String token = jwtTokenProvider.createToken(
+//                 user.getEmail(),
+//                 user.getRole()
+//         );
 
-        return new LoginResponse(
-                token,
-                user.getId(),
-                user.getEmail(),
-                user.getRole()
-        );
-    }
-}
+//         return new LoginResponse(
+//                 token,
+//                 user.getId(),
+//                 user.getEmail(),
+//                 user.getRole()
+//         );
+//     }
+// }
