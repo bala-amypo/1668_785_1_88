@@ -19,15 +19,14 @@ public class JwtTokenProvider {
             @Value("${jwt.secret}") String secret,
             @Value("${jwt.expiration}") long expirationMs) {
 
-        // HS256 requires a key of at least 32 bytes
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
         this.expirationMs = expirationMs;
     }
 
-    // =================== TOKEN GENERATION (used in app) ===================
+    // For application usage
     public String generateToken(Long userId, String email, String role) {
         return Jwts.builder()
-                .setSubject(userId.toString()) // subject = userId
+                .setSubject(userId.toString())
                 .claim("userId", userId)
                 .claim("email", email)
                 .claim("role", role)
@@ -37,16 +36,14 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    // =================== TOKEN GENERATION (used in tests) ===================
+    // For your tests: generateToken(authentication, ...)
     public String generateToken(Authentication authentication,
                                 Long userId,
                                 String email,
                                 String role) {
-        // authentication is not used here, but the signature matches your tests
         return generateToken(userId, email, role);
     }
 
-    // =================== TOKEN VALIDATION ===================
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
@@ -59,14 +56,12 @@ public class JwtTokenProvider {
         }
     }
 
-    // =================== READ DATA FROM TOKEN ===================
     public Long getUserIdFromToken(String token) {
         Claims claims = parseClaims(token);
         Long id = claims.get("userId", Long.class);
         if (id != null) {
             return id;
         }
-        // fallback to subject if custom claim missing (for t50)
         return Long.valueOf(claims.getSubject());
     }
 
@@ -78,7 +73,6 @@ public class JwtTokenProvider {
         return parseClaims(token).get("role", String.class);
     }
 
-    // =================== INTERNAL PARSER ===================
     private Claims parseClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)

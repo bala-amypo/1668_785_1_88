@@ -2,10 +2,11 @@ package com.example.demo.security;
 
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -17,33 +18,19 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email)
-            throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() ->
-                        new UsernameNotFoundException("User not found with email: " + email));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
 
-        return org.springframework.security.core.userdetails.User
-                .withUsername(user.getEmail())
-                .password(user.getPassword())
-                // ✅ FIX HERE (NO .name())
-                .roles(user.getRole())
-                .build();
+        // Assuming your User has getPassword() and getRole() returning "RESIDENT", "ADMIN", etc.
+        String role = user.getRole(); // e.g. RESIDENT
+        String springRole = "ROLE_" + role; // Spring expects ROLE_ prefix
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(),
+                List.of(new SimpleGrantedAuthority(springRole))
+        );
     }
 }
-
-// package com.example.demo.security;
-
-// import org.springframework.security.core.userdetails.UserDetailsService;
-// import org.springframework.security.core.userdetails.UserDetails;
-// import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
-// public class CustomUserDetailsService implements UserDetailsService {
-
-//     @Override
-//     public UserDetails loadUserByUsername(String username)
-//             throws UsernameNotFoundException {
-//         throw new UsernameNotFoundException("Not implemented");
-//     }
-// }
