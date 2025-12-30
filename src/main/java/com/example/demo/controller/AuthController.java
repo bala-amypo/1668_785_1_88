@@ -1,333 +1,13 @@
-// package com.example.demo.controller;
-
-// import com.example.demo.dto.LoginRequest;
-// import com.example.demo.dto.LoginResponse;
-// import com.example.demo.dto.RegisterRequest;
-// import com.example.demo.model.User;
-// import com.example.demo.security.JwtTokenProvider;
-// import com.example.demo.service.UserService;
-// import org.springframework.security.crypto.password.PasswordEncoder;
-// import org.springframework.web.bind.annotation.*;
-
-// @RestController
-// @RequestMapping("/auth")
-// public class AuthController {
-
-//     private final UserService userService;
-//     private final JwtTokenProvider jwtTokenProvider;
-//     private final PasswordEncoder passwordEncoder;
-
-//     public AuthController(UserService userService,
-//                           JwtTokenProvider jwtTokenProvider,
-//                           PasswordEncoder passwordEncoder) {
-//         this.userService = userService;
-//         this.jwtTokenProvider = jwtTokenProvider;
-//         this.passwordEncoder = passwordEncoder;
-//     }
-
-//     @PostMapping("/register")
-//     public User register(@RequestBody RegisterRequest request) {
-
-//         User user = new User(
-//                 null,
-//                 request.getName(),
-//                 request.getEmail(),
-//                 request.getPassword(),
-//                 "RESIDENT",
-//                 null
-//         );
-
-//         return userService.register(user);
-//     }
-
-//     @PostMapping("/login")
-//     public LoginResponse login(@RequestBody LoginRequest request) {
-
-//         User user = userService.findByEmail(request.getEmail());
-
-//         if (user == null || !passwordEncoder.matches(
-//                 request.getPassword(),
-//                 user.getPassword())) {
-//             throw new RuntimeException("Invalid email or password");
-//         }
-
-//         String token = jwtTokenProvider.generateToken(
-//                 null,
-//                 user.getId(),
-//                 user.getEmail(),
-//                 user.getRole()
-//         );
-
-//         return new LoginResponse(
-//                 token,
-//                 user.getId(),
-//                 user.getEmail(),
-//                 user.getRole()
-//         );
-//     }
-// }
-// package com.example.demo.controller;
-
-// import com.example.demo.dto.*;
-// import com.example.demo.model.User;
-// import com.example.demo.security.JwtTokenProvider;
-// import com.example.demo.service.UserService;
-// import org.springframework.web.bind.annotation.*;
-
-// @RestController
-// @RequestMapping("/auth")
-// public class AuthController {
-
-//     private final UserService userService;
-//     private final JwtTokenProvider jwtTokenProvider;
-
-//     public AuthController(UserService userService,
-//                           JwtTokenProvider jwtTokenProvider) {
-//         this.userService = userService;
-//         this.jwtTokenProvider = jwtTokenProvider;
-//     }
-
-//     @PostMapping("/register")
-//     public User register(@RequestBody RegisterRequest req) {
-//         User u = new User(null, req.getName(),
-//                 req.getEmail(), req.getPassword(), "RESIDENT", null);
-//         return userService.register(u);
-//     }
-
-//     @PostMapping("/login")
-//     public LoginResponse login() {
-//         return null;
-//     }
-// }
-// package com.example.demo.controller;
-
-// import com.example.demo.dto.LoginRequest;
-// import com.example.demo.dto.LoginResponse;
-// import com.example.demo.dto.RegisterRequest;
-// import com.example.demo.model.User;
-// import com.example.demo.security.JwtTokenProvider;
-// import com.example.demo.service.UserService;
-// import org.springframework.web.bind.annotation.*;
-
-// @RestController
-// @RequestMapping("/auth")
-// public class AuthController {
-
-//     private final UserService userService;
-//     private final JwtTokenProvider jwtTokenProvider;
-
-//     public AuthController(UserService userService,
-//                           JwtTokenProvider jwtTokenProvider) {
-//         this.userService = userService;
-//         this.jwtTokenProvider = jwtTokenProvider;
-//     }
-
-//     // ================= REGISTER =================
-//     @PostMapping(
-//             value = "/register",
-//             consumes = "application/json",
-//             produces = "application/json"
-//     )
-//     public User register(@RequestBody RegisterRequest request) {
-
-//         User user = new User(
-//                 null,
-//                 request.getName(),
-//                 request.getEmail(),
-//                 request.getPassword(), // plain password (BCrypt optional later)
-//                 "RESIDENT",
-//                 null
-//         );
-
-//         return userService.register(user);
-//     }
-
-//     // ================= LOGIN =================
-//     @PostMapping(
-//             value = "/login",
-//             consumes = "application/json",
-//             produces = "application/json"
-//     )
-//     public LoginResponse login(@RequestBody LoginRequest request) {
-
-//         // 1️⃣ Find user
-//         User user = userService.findByEmail(request.getEmail());
-
-//         // 2️⃣ Validate credentials
-//         if (user == null || !user.getPassword().equals(request.getPassword())) {
-//             throw new RuntimeException("Invalid email or password");
-//         }
-
-//         // 3️⃣ Generate JWT
-//         String token = jwtTokenProvider.createToken(
-//                 user.getEmail(),
-//                 user.getRole()
-//         );
-
-//         // 4️⃣ Return response
-//         return new LoginResponse(
-//                 token,
-//                 user.getId(),
-//                 user.getEmail(),
-//                 user.getRole()
-//         );
-//     }
-// }
-// package com.example.demo.controller;
-
-// import com.example.demo.dto.LoginRequest;
-// import com.example.demo.dto.LoginResponse;
-// import com.example.demo.dto.RegisterRequest;
-// import com.example.demo.model.User;
-// import com.example.demo.security.JwtTokenProvider;
-// import com.example.demo.service.UserService;
-// import org.springframework.security.crypto.password.PasswordEncoder;
-// import org.springframework.web.bind.annotation.*;
-
-// @RestController
-// @RequestMapping("/auth")
-// public class AuthController {
-
-//     private final UserService userService;
-//     private final JwtTokenProvider jwtTokenProvider;
-//     private final PasswordEncoder passwordEncoder;
-
-//     public AuthController(UserService userService,
-//                           JwtTokenProvider jwtTokenProvider,
-//                           PasswordEncoder passwordEncoder) {
-//         this.userService = userService;
-//         this.jwtTokenProvider = jwtTokenProvider;
-//         this.passwordEncoder = passwordEncoder;
-//     }
-
-//     // ================= REGISTER =================
-//     @PostMapping(value = "/register", consumes = "application/json", produces = "application/json")
-//     public User register(@RequestBody RegisterRequest request) {
-
-//         User user = new User(
-//                 null,
-//                 request.getName(),
-//                 request.getEmail(),
-//                 passwordEncoder.encode(request.getPassword()), // ✅ HASHED
-//                 "RESIDENT",
-//                 null
-//         );
-
-//         return userService.register(user);
-//     }
-
-//     // ================= LOGIN =================
-//     @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
-//     public LoginResponse login(@RequestBody LoginRequest request) {
-
-//         User user = userService.findByEmail(request.getEmail());
-
-//         // ✅ CORRECT password validation
-//         if (user == null || !passwordEncoder.matches(
-//                 request.getPassword(),
-//                 user.getPassword()
-//         )) {
-//             throw new RuntimeException("Invalid email or password");
-//         }
-
-//         // ✅ CORRECT token generation
-//         String token = jwtTokenProvider.generateToken(
-//                 user.getId(),
-//                 user.getEmail(),
-//                 user.getRole()
-//         );
-
-//         return new LoginResponse(
-//                 token,
-//                 user.getId(),
-//                 user.getEmail(),
-//                 user.getRole()
-//         );
-//     }
-// }
-// package com.example.demo.controller;
-
-// import com.example.demo.dto.LoginRequest;
-// import com.example.demo.dto.LoginResponse;
-// import com.example.demo.dto.RegisterRequest;
-// import com.example.demo.model.User;
-// import com.example.demo.security.JwtTokenProvider;
-// import com.example.demo.service.UserService;
-// import org.springframework.security.crypto.password.PasswordEncoder;
-// import org.springframework.web.bind.annotation.*;
-
-// @RestController
-// @RequestMapping("/auth")
-// public class AuthController {
-
-//     private final UserService userService;
-//     private final JwtTokenProvider jwtTokenProvider;
-//     private final PasswordEncoder passwordEncoder;
-
-//     public AuthController(UserService userService,
-//                           JwtTokenProvider jwtTokenProvider,
-//                           PasswordEncoder passwordEncoder) {
-//         this.userService = userService;
-//         this.jwtTokenProvider = jwtTokenProvider;
-//         this.passwordEncoder = passwordEncoder;
-//     }
-
-//     // ================= REGISTER =================
-//     @PostMapping(value = "/register", consumes = "application/json", produces = "application/json")
-//     public User register(@RequestBody RegisterRequest request) {
-
-        
-//         User user = new User(
-//                 null,
-//                 request.getName(),
-//                 request.getEmail(),
-//                 request.getPassword(), // plain password
-//                 "RESIDENT",
-//                 null
-//         );
-
-//         return userService.register(user); // encoded in service
-//     }
-
-   
-//     @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
-//     public LoginResponse login(@RequestBody LoginRequest request) {
-
-//         User user = userService.findByEmail(request.getEmail());
-
-//         if (user == null || !passwordEncoder.matches(
-//                 request.getPassword(),
-//                 user.getPassword()
-//         )) {
-//             throw new RuntimeException("Invalid email or password");
-//         }
-
-        
-//         String token = jwtTokenProvider.createToken(
-//                 user.getEmail(),
-//                 user.getRole()
-//         );
-
-//         return new LoginResponse(
-//                 token,
-//                 user.getId(),
-//                 user.getEmail(),
-//                 user.getRole()
-//         );
-//     }
-// }
 package com.example.demo.controller;
 
-import com.example.demo.dto.LoginRequest;
-import com.example.demo.dto.LoginResponse;
 import com.example.demo.dto.RegisterRequest;
 import com.example.demo.model.User;
 import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.UserService;
-
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -335,64 +15,36 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final UserService userService;
+    private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
-    private final PasswordEncoder passwordEncoder;
 
     public AuthController(UserService userService,
-                          JwtTokenProvider jwtTokenProvider,
-                          PasswordEncoder passwordEncoder) {
+                          AuthenticationManager authenticationManager,
+                          JwtTokenProvider jwtTokenProvider) {
         this.userService = userService;
+        this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
-        this.passwordEncoder = passwordEncoder;
     }
 
-    // ================= REGISTER =================
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody RegisterRequest request) {
-
-        User user = new User(
-                null,
-                request.getName(),
-                request.getEmail(),
-                passwordEncoder.encode(request.getPassword()),
-                "RESIDENT",
-                null
-        );
-
-        User savedUser = userService.register(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+    public ResponseEntity<User> register(@RequestBody RegisterRequest req) {
+        User u = new User(null, req.getName(), req.getEmail(), req.getPassword(), "RESIDENT");
+        User saved = userService.register(u);
+        return ResponseEntity.status(201).body(saved);
     }
 
-    // ================= LOGIN =================
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-
-        User user = userService.findByEmail(request.getEmail());
-
-        // ❌ INVALID LOGIN → 401
-        if (user == null || !passwordEncoder.matches(
-                request.getPassword(),
-                user.getPassword())) {
-
-            return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED)
-                    .body("Invalid email or password");
-        }
-
-        // ✅ VALID LOGIN → 200
-        String token = jwtTokenProvider.generateToken(
-                user.getId(),
-                user.getEmail(),
-                user.getRole()
+    public ResponseEntity<String> login(@RequestBody RegisterRequest req) {
+        Authentication auth = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(req.getEmail(), req.getPassword())
         );
 
-        LoginResponse response = new LoginResponse(
-                token,
-                user.getId(),
-                user.getEmail(),
-                user.getRole()
-        );
+        // In a real app, fetch user from DB to get id/role
+        String email = req.getEmail();
+        Long userId = 1L;        // TODO: replace by real userId from DB
+        String role = "RESIDENT";
 
-        return ResponseEntity.ok(response);
+        String token = jwtTokenProvider.generateToken(userId, email, role);
+        return ResponseEntity.ok(token);
     }
 }
